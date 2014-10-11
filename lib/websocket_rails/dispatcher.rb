@@ -44,6 +44,13 @@ module WebsocketRails
       end
     end
 
+    def broadcast_message_to_others(event)
+      connection_manager.connections.map do |_, connection|
+        next if event.connection == connection
+        connection.trigger event
+      end
+    end
+
     def reload_event_map!
       return unless defined?(Rails) and !Rails.configuration.cache_classes
       begin
