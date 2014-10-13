@@ -149,14 +149,7 @@ module WebsocketRails
     def broadcast_message(event_name, message, options={})
       options.merge! :connection => connection, :data => message
       event = Event.new( event_name, options )
-      @_dispatcher.broadcast_message event if @_dispatcher.respond_to?(:broadcast_message)
-    end
-
-    # Broadcasts a message to all connected clients. See {#send_message} for message passing details.
-    def broadcast_message_to_others(event_name, message, options={})
-      options.merge! :connection => connection, :data => message
-      event = Event.new( event_name, options )
-      @_dispatcher.broadcast_message_to_others event if @_dispatcher.respond_to?(:broadcast_message_to_others)
+      @_dispatcher.broadcast_message event, options.slice(:except_self) if @_dispatcher.respond_to?(:broadcast_message)
     end
 
     def request

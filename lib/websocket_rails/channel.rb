@@ -34,7 +34,7 @@ module WebsocketRails
       event = Event.new event_name, options
 
       info "[#{@name}] #{event.data.inspect}"
-      send_data event
+      send_data event, options.slice(:except_self)
     end
 
     def trigger_event(event)
@@ -82,13 +82,14 @@ module WebsocketRails
       Event.new('websocket_rails.channel_token', options).trigger
     end
 
-    def send_data(event)
+    def send_data(event, options)
       return unless event.should_propagate?
       if WebsocketRails.synchronize? && event.server_token.nil?
         Synchronization.publish event
       end
 
       @subscribers.each do |subscriber|
+        next if options[:except_self] == subscriber
         subscriber.trigger event
       end
     end

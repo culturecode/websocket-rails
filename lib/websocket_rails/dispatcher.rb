@@ -38,15 +38,9 @@ module WebsocketRails
       event.connection.trigger event
     end
 
-    def broadcast_message(event)
+    def broadcast_message(event, options = {})
       connection_manager.connections.map do |_, connection|
-        connection.trigger event
-      end
-    end
-
-    def broadcast_message_to_others(event)
-      connection_manager.connections.map do |_, connection|
-        next if event.connection == connection
+        next if options[:except_self] && event.connection == connection
         connection.trigger event
       end
     end
