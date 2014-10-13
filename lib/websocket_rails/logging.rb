@@ -52,7 +52,7 @@ module WebsocketRails
       message = "Started Event: #{event.encoded_name}\n"
       message << "#{colorize(:cyan, "Name:")} #{event.encoded_name}\n"
       message << "#{colorize(:cyan, "Data:")} #{event.data.inspect}\n" if log_data?(event)
-      message << "#{colorize(:cyan, "Connection:")} #{event.connection}\n\n"
+      message << "#{colorize(:cyan, "Connection:")} #{event.connection.id}\n\n"
       info message
     end
 
