@@ -82,7 +82,7 @@ module WebsocketRails
       Event.new('websocket_rails.channel_token', options).trigger
     end
 
-    def send_data(event, options)
+    def send_data(event, options = {})
       return unless event.should_propagate?
       if WebsocketRails.synchronize? && event.server_token.nil?
         Synchronization.publish event
